@@ -1,0 +1,16 @@
+.venv
+.venv-1
+__pycache__
+*.pyc
+.git
+.env
+.pytest_cache
+.mypy_cache
+.ruff_cache
+mlruns
+data/processed
+models
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store

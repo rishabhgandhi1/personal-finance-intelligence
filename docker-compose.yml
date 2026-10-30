@@ -1,0 +1,29 @@
+services:
+  api:
+    build: .
+    container_name: personal-finance-api
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite:////app/data/personal_finance.db
+      MLFLOW_TRACKING_URI: sqlite:////app/mlflow.db
+    volumes:
+      - ./data:/app/data
+      - ./mlruns:/app/mlruns
+      - ./mlflow.db:/app/mlflow.db
+    restart: unless-stopped
+
+  streamlit:
+    build: .
+    container_name: personal-finance-streamlit
+    command: streamlit run streamlit_app/app.py --server.address 0.0.0.0 --server.port 8501
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
